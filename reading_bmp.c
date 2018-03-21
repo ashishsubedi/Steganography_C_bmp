@@ -4,7 +4,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./test2.bmp","rb");
+    fp = fopen("./test.bmp","rb");
 
     //FOR 2x2,replace w and h
     int w = 2, h = 2;//Resolution of image. this time 32x32
@@ -28,12 +28,13 @@ int main(){
     for(i=0;i<h;i++){
         for(j=0;j<w;j++){
 
-            image[j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
-            image[j][1] = getc(fp);//[1] = G [0] = R
-            image[j][0] = getc(fp);
+            image[(i*h)+j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
+            image[(i*h)+j][1] = getc(fp);//[1] = G [0] = R
+            image[(i*h)+j][0] = getc(fp);
             //BMP IS STORED from bottom left and changing row means going up instead of down
             //So 0,0 indicates bottom left position, 1,1 means top right in 2x2 pixel
-            printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[j][0],image[j][1],image[j][2]);
+            printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[(i*h)+j][0],image[(i*h)+j][1],image[(i*h)+j][2]);
+            //printf("%d %d")
         }
         fseek(fp,2,SEEK_CUR);//GETTING TWO bytes ahead because of padding (2 bytes).
     }

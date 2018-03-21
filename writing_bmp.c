@@ -46,12 +46,13 @@ int main(){
     for(i=0;i<h;i++){
         for(j=0;j<w;j++){
 
-            image[j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
-            image[j][1] = getc(fp);//[1] = G [0] = R
-            image[j][0] = getc(fp);
+            image[(i*h)+j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
+            image[(i*h)+j][1] = getc(fp);//[1] = G [0] = R
+            image[(i*h)+j][0] = getc(fp);
             //BMP IS STORED from bottom left and changing row means going up instead of down
             //So 0,0 indicates bottom left position, 1,1 means top right in 2x2 pixel
-            printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[j][0],image[j][1],image[j][2]);
+            printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[(i*h)+j][0],image[(i*h)+j][1],image[(i*h)+j][2]);
+            //printf("%d %d")
         }
         fseek(fp,2,SEEK_CUR);//GETTING TWO bytes ahead because of padding (2 bytes).
     }
@@ -60,7 +61,6 @@ int main(){
         FILE *fq;
         fq = fopen("code_image.bmp","wb");
         rewind(fp);//File pointer goes to start
-        int buffer[54];
         ///COPIED FROM INTERNET TO ENTER HEADER FILES OF BMP
 
 
@@ -104,7 +104,9 @@ int main(){
 
         //NOW for changing some parts .. I AM GONNA CHANGE MSB INSTEAD OF LSB .. LETS SEE
 
-                    
+        int c = 5;
+
+
         
 
    //END TEST
