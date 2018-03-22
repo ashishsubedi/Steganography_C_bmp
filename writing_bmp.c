@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+
   struct BitMap
 {
   short Type;
@@ -52,7 +54,7 @@ int main(){
             //BMP IS STORED from bottom left and changing row means going up instead of down
             //So 0,0 indicates bottom left position, 1,1 means top right in 2x2 pixel
             printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[(i*h)+j][0],image[(i*h)+j][1],image[(i*h)+j][2]);
-            //printf("%d %d")
+           
         }
         fseek(fp,2,SEEK_CUR);//GETTING TWO bytes ahead because of padding (2 bytes).
     }
@@ -105,6 +107,26 @@ int main(){
         //NOW for changing some parts .. I AM GONNA CHANGE MSB INSTEAD OF LSB .. LETS SEE
 
         int c = 5;
+        int R,G,B;
+        for(i=0;i<h;i++){
+            for(j=0;j<w;j++){
+
+
+
+            //TODO: GET BIT OF CURRENT IMAGE AND CHANGE IT
+
+
+                R =  image[(i*h)+j][0];
+                G =  image[(i*h)+j][1];
+                B =  image[(i*h)+j][2];
+/* 
+                R = R - R%2;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So 
+                B = B - B%2;//If odd, remainder is 1, and subtracts it. Else does nothing
+                G = G - G%2; */
+                
+                printf("\n\nR: %d G: %d B:%d ",R,G,B);
+            }
+        }
 
 
         
