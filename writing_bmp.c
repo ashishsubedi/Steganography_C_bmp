@@ -26,7 +26,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./32_2.bmp","rb");
+    fp = fopen("./test.bmp","rb");
 
     //FOR 2x2,replace w and h
     int w = 32, h = 32;//Resolution of image. this time 32x32
@@ -64,7 +64,7 @@ int main(){
    
     //JUST TESTING TO CREATE ANOTHER IMAGE WITH DIFFERENT VALUES
         FILE *fq;
-        fq = fopen("code_image_32_2.bmp","wb");
+        fq = fopen("testss.bmp","wb");
         rewind(fp);//File pointer goes to start
         ///COPIED FROM INTERNET TO ENTER HEADER FILES OF BMP
 
