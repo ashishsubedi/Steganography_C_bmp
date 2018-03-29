@@ -27,52 +27,21 @@ int main(){
     FILE *fp;
     //CHange image accordingly
     fp = fopen("./sword.bmp","rb");
+    FILE *fq;
+        fq = fopen("image.bmp","wb");
 
     //FOR 2x2,replace w and h
-    int w = 32, h = 32;//Resolution of image. this time 32x32
+  /*   int w =32, h =32;//Resolution of image. this time 32x32
     int r = w*h*4;
-    int image[r][3];//3 represents R G B column
-
+    int image[r][4];//3 represents R G B column
+*/
     int i,j;
 
     if(fp == NULL){
         printf("File not found");
         return 0;
     }
-   /*  int byte;
 
-    for(i=0;i<54;i++) 
-        byte = getc(fp);//Skipping all the bmp header . it contains first 54 bytes. 
- */
-//ALTERNATIVE FOR UPPER COMMENTED code
-    fseek(fp,54,SEEK_SET);
-        
-    for(i=0;i<h;i++){
-        for(j=0;j<w;j++){
-            
-            image[(i*h)+j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
-            image[(i*h)+j][1] = getc(fp);//[1] = G [0] = R
-            image[(i*h)+j][0] = getc(fp);
-
-            //BMP IS STORED from bottom left and changing row means going up instead of down
-            //So 0,0 indicates bottom left position, 1,1 means top right in 2x2 pixel
-    //  printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[(i*h)+j][0],image[(i*h)+j][1],image[(i*h)+j][2]);
-           
-        }
-        //fseek(fp,0,SEEK_CUR);//GETTING TWO bytes ahead because of padding (2 bytes).
-    }
-   
-    //JUST TESTING TO CREATE ANOTHER IMAGE WITH DIFFERENT VALUES
-        FILE *fq;
-        fq = fopen("code_image.bmp","wb");
-        rewind(fp);//File pointer goes to start
-        ///COPIED FROM INTERNET TO ENTER HEADER FILES OF BMP
-
-
- 
-   
-       // memset(&Header, 0, sizeof(Header));
-        
         fread(&Header.Type, 2, 1, fp);
         fread(&Header.Size, 4, 1, fp);
         fread(&Header.Reserve1, 2, 1, fp);
@@ -89,7 +58,65 @@ int main(){
         fread(&Header.biYPelsPerMeter, 4, 1, fp);
         fread(&Header.biClrUsed, 4, 1, fp);
         fread(&Header.biClrImportant, 4, 1, fp);
-//COPYING EVERYTHING FROM ORIGINAL HEADER FILE AND REPLACING
+
+
+        printf("%d\n",Header.Type);
+        printf("%ld\n",Header.Size);
+        printf("%ld\n",Header.Reserve1);
+        printf("%ld\n",Header.Reserve2);
+        printf("%ld\n",Header.OffBits);
+        printf("%ld\n",Header.biSize);
+        printf("%ld\n",Header.biWidth);
+        printf("%ld\n",Header.biHeight);
+        printf("%ld\n",Header.biPlanes);
+        printf("%ld\n",Header.biBitCount);
+        printf("%ld\n",Header.biCompression);
+        printf("%ld\n",Header.biSizeImage);
+        printf("%ld\n",Header.biXPelsPerMeter);
+        printf("%ld\n",Header.biYPelsPerMeter);
+        printf("%ld\n",Header.biClrUsed);
+        printf("%ld\n",Header.biClrImportant);
+   /*  int byte;
+
+    for(i=0;i<54;i++)
+        byte = getc(fp);//Skipping all the bmp header . it contains first 54 bytes.
+
+ */
+
+   int w =(int) Header.biWidth, h =(int) Header.biHeight;//Resolution of image. this time 32x32
+    int r = (int)Header.biSizeImage;
+
+    int image[r][4];//3 represents R G B column
+
+//ALTERNATIVE FOR UPPER COMMENTED code
+    rewind(fp);
+    //fseek(fp,Header.OffBits,SEEK_SET);
+    fseek(fp,54,SEEK_SET);
+
+    for(i=0;i<h;i++){
+        for(j=0;j<w;j++){
+
+            image[(i*h)+j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
+            image[(i*h)+j][1] = getc(fp);//[1] = G [0] = R
+            image[(i*h)+j][0] = getc(fp);
+            if(Header.biBitCount == 32){
+                image[(i*h)+j][3] = getc(fp);
+            }
+            printf("Image %d,%d : R:%d G:%d B:%d A:%d  %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],image[(i*h+j)][3],i*h+j);
+            //BMP IS STORED from bottom left and changing row means going up instead of down
+            //So 0,0 indicates bottom left position, 1,1 means top right in 2x2 pixel
+    //  printf("pixel %d %d : [R:%d,G:%d,B:%d]\n",i,j,image[(i*h)+j][0],image[(i*h)+j][1],image[(i*h)+j][2]);
+
+        }
+        //fseek(fp,0,SEEK_CUR);//GETTING TWO bytes ahead because of padding (2 bytes).
+    }
+
+    //JUST TESTING TO CREATE ANOTHER IMAGE WITH DIFFERENT VALUES
+
+
+        ///COPIED FROM INTERNET TO ENTER HEADER FILES OF BMP
+
+        //COPYING EVERYTHING FROM ORIGINAL HEADER FILE AND REPLACING
         fwrite(&Header.Type, 2, 1, fq);
         fwrite(&Header.Size, 4, 1, fq);
         fwrite(&Header.Reserve1, 2, 1, fq);
@@ -107,12 +134,21 @@ int main(){
         fwrite(&Header.biClrUsed, 4, 1, fq);
         fwrite(&Header.biClrImportant, 4, 1, fq);
 
+
+       // memset(&Header, 0, sizeof(Header));
+
+
+
         //NOW for changing some parts .. I AM GONNA CHANGE MSB INSTEAD OF LSB .. LETS SEE
 
-       // int c = 5;
-       fseek(fq,54,SEEK_SET);
-        int R,G,B;
-        
+      // int c = 5;
+      // fseek(fq,54,SEEK_SET);
+//offbits tells where pixel start from so
+
+     //   fseek(fq,Header.OffBits,SEEK_SET);
+        fseek(fq,54,SEEK_SET);
+        int R,G,B,A;
+
         for(i=0;i<h;i++){
             for(j=0;j<w;j++){
 
@@ -124,39 +160,46 @@ int main(){
                 R =  image[(i*h)+j][0];
                 G =  image[(i*h)+j][1];
                 B =  image[(i*h)+j][2];
+                if(Header.biBitCount == 32){
+                   A = image[(i*h)+j][3];
+                }
 
-             /*    R = R - R/3;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So 
-                B = B - B/3;//If odd, remainder is 1, and subtracts it. Else does nothing
-                G = G - G/3;
-                 */
-                putc(B,fq);
-                putc(G,fq);
-                
+             //    R = R - R/3;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
+               // B = B - B/3;//If odd, remainder is 1, and subtracts it. Else does nothing
+                //G = G - G/3;
+
                 putc(R,fq);
-              //  printf("Image %d,%d : R:%d G:%d B:%d   %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],i*h+j);
-                
-              //  printf("%d, %d R: %d G: %d B:%d\n\n",i,j,R,G,B);
+                putc(R,fq);
+
+                putc(G,fq);
+                 if(Header.biBitCount == 32){
+                   putc(A,fq);
+                }
+               // printf("Image %d,%d : R:%d G:%d B:%d   %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],i*h+j);
+
+                //printf("%d, %d R: %d G: %d B:%d\n\n",i,j,R,G,B);
             }
             //No need for this because I am now saving padding data as well
-            
+
             //putc(0,fq);//For 4 bytes padding
             //putc(0,fq);
-            
-            
-            
-            
-            
+
+
+
+
+
         }
-        putc(0,fq);//For 4 bytes padding
-        putc(0,fq);
-       
-        
+      //  putc(0,fq);//For 4 bytes padding
+       // putc(0,fq);
+
+
 
    //END TEST
 
+
     fclose(fp);
     fclose(fq);
-} 
+}
 
 
 
