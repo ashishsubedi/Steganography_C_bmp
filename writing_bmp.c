@@ -26,11 +26,11 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./test.bmp","rb");
+    fp = fopen("./sword.bmp","rb");
 
     //FOR 2x2,replace w and h
     int w = 32, h = 32;//Resolution of image. this time 32x32
-    int r = w*h;
+    int r = w*h*4;
     int image[r][3];//3 represents R G B column
 
     int i,j;
@@ -64,7 +64,7 @@ int main(){
    
     //JUST TESTING TO CREATE ANOTHER IMAGE WITH DIFFERENT VALUES
         FILE *fq;
-        fq = fopen("testss.bmp","wb");
+        fq = fopen("code_image.bmp","wb");
         rewind(fp);//File pointer goes to start
         ///COPIED FROM INTERNET TO ENTER HEADER FILES OF BMP
 
@@ -112,12 +112,7 @@ int main(){
        // int c = 5;
        fseek(fq,54,SEEK_SET);
         int R,G,B;
-        for(i=0;i<h;i++){
-            for(j=0;j<w;j++){
-            }
-        }
-              
-                printf("\n");
+        
         for(i=0;i<h;i++){
             for(j=0;j<w;j++){
 
@@ -134,10 +129,10 @@ int main(){
                 B = B - B/3;//If odd, remainder is 1, and subtracts it. Else does nothing
                 G = G - G/3;
                  */
-                putc(R,fq);
+                putc(B,fq);
                 putc(G,fq);
                 
-                putc(B,fq);
+                putc(R,fq);
               //  printf("Image %d,%d : R:%d G:%d B:%d   %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],i*h+j);
                 
               //  printf("%d, %d R: %d G: %d B:%d\n\n",i,j,R,G,B);
