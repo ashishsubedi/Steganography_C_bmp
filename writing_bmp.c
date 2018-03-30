@@ -26,7 +26,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./sword.bmp","rb");
+    fp = fopen("./test.bmp","rb");
     FILE *fq;
         fq = fopen("image.bmp","wb");
 
@@ -90,8 +90,11 @@ int main(){
 
 //ALTERNATIVE FOR UPPER COMMENTED code
     rewind(fp);
-    //fseek(fp,Header.OffBits,SEEK_SET);
+    printf(" Header: %ld",Header.OffBits);
+    //fseek(fp,(int)Header.OffBits,SEEK_SET);
+    printf("\n%ld %ld %d",ftell(fp),ftell(fq),r);
     fseek(fp,54,SEEK_SET);
+
 
     for(i=0;i<h;i++){
         for(j=0;j<w;j++){
@@ -102,6 +105,8 @@ int main(){
             if(Header.biBitCount == 32){
                 image[(i*h)+j][3] = getc(fp);
             }
+
+
             printf("Image %d,%d : R:%d G:%d B:%d A:%d  %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],image[(i*h+j)][3],i*h+j);
             //BMP IS STORED from bottom left and changing row means going up instead of down
             //So 0,0 indicates bottom left position, 1,1 means top right in 2x2 pixel
@@ -145,9 +150,10 @@ int main(){
       // fseek(fq,54,SEEK_SET);
 //offbits tells where pixel start from so
 
-     //   fseek(fq,Header.OffBits,SEEK_SET);
+       // fseek(fq,(int)Header.OffBits,SEEK_SET);
         fseek(fq,54,SEEK_SET);
         int R,G,B,A;
+        R=G=B=A=0;
 
         for(i=0;i<h;i++){
             for(j=0;j<w;j++){
@@ -164,17 +170,18 @@ int main(){
                    A = image[(i*h)+j][3];
                 }
 
-             //    R = R - R/3;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
-               // B = B - B/3;//If odd, remainder is 1, and subtracts it. Else does nothing
-                //G = G - G/3;
+                R = R - R%2;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
+                B = B - B%2;//If odd, remainder is 1, and subtracts it. Else does nothing
+                G = G - G%2;
 
                 putc(R,fq);
-                putc(R,fq);
+                putc(B,fq);
 
                 putc(G,fq);
                  if(Header.biBitCount == 32){
                    putc(A,fq);
                 }
+
                // printf("Image %d,%d : R:%d G:%d B:%d   %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],i*h+j);
 
                 //printf("%d, %d R: %d G: %d B:%d\n\n",i,j,R,G,B);
