@@ -26,7 +26,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./test.bmp","rb");
+    fp = fopen("./bmp.bmp","rb");
     FILE *fq;
         fq = fopen("image.bmp","wb");
 
@@ -98,13 +98,13 @@ int main(){
 
     for(i=0;i<h;i++){
         for(j=0;j<w;j++){
-
-            image[(i*h)+j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
-            image[(i*h)+j][1] = getc(fp);//[1] = G [0] = R
-            image[(i*h)+j][0] = getc(fp);
             if(Header.biBitCount == 32){
                 image[(i*h)+j][3] = getc(fp);
             }
+            image[(i*h)+j][2] = getc(fp);//BMP SAVES IN BGR Format. So assining in revrese order.[2] = B
+            image[(i*h)+j][1] = getc(fp);//[1] = G [0] = R
+            image[(i*h)+j][0] = getc(fp);
+
 
 
             printf("Image %d,%d : R:%d G:%d B:%d A:%d  %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],image[(i*h+j)][3],i*h+j);
@@ -162,25 +162,25 @@ int main(){
 
             //TODO: GET BIT OF CURRENT IMAGE AND CHANGE IT
 
-
-                R =  image[(i*h)+j][0];
-                G =  image[(i*h)+j][1];
-                B =  image[(i*h)+j][2];
                 if(Header.biBitCount == 32){
                    A = image[(i*h)+j][3];
                 }
+                R =  image[(i*h)+j][0];
+                G =  image[(i*h)+j][1];
+                B =  image[(i*h)+j][2];
 
-                R = R - R%2;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
-                B = B - B%2;//If odd, remainder is 1, and subtracts it. Else does nothing
-                G = G - G%2;
 
-                putc(R,fq);
-                putc(B,fq);
+              //  R = R - R%2;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
+               // B = B - B%2;//If odd, remainder is 1, and subtracts it. Else does nothing
+                //G = G - G%2;
 
-                putc(G,fq);
-                 if(Header.biBitCount == 32){
+                if(Header.biBitCount == 32){
                    putc(A,fq);
                 }
+                putc(R,fq);
+                putc(G,fq);
+                putc(B,fq);
+
 
                // printf("Image %d,%d : R:%d G:%d B:%d   %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],i*h+j);
 
@@ -196,8 +196,6 @@ int main(){
 
 
         }
-      //  putc(0,fq);//For 4 bytes padding
-       // putc(0,fq);
 
 
 
