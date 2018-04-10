@@ -26,7 +26,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./bmp.bmp","rb");
+    fp = fopen("./sword.bmp","rb");
     FILE *fq;
         fq = fopen("image.bmp","wb");
 
@@ -42,7 +42,7 @@ int main(){
         return 0;
     }
 
-        fread(&Header.Type, 2, 1, fp);
+        fread(&Header.Type, 2, 1, fp);//2 equivalent to sizeof(Header.Type)
         fread(&Header.Size, 4, 1, fp);
         fread(&Header.Reserve1, 2, 1, fp);
         fread(&Header.Reserve2, 2, 1, fp);
