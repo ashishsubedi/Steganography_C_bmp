@@ -2,6 +2,7 @@
 #include<iostream>
 #include<fstream>
 
+typedef unsigned char BYTE;
 using namespace std;
 
 struct BitMap{
@@ -44,10 +45,15 @@ void readHeaderFile(ifstream& fp,struct BitMap& Header){
 
 }
 //YOU CAN READ LIKE THIS AS WELL>> I FOUND IT NOW AS WELL.. HECK YEAH
+
+//THIS WORKS BUT SOMEWHERE THERE IS A HOLE IN BYTE SO PREFERRED IS READING BYTE BY BYTE AS BEFORE
 void readHeaderFileCompletely(ifstream& fp,struct BitMap& Header){
     fp.read((char*)&Header,sizeof Header);
 }
 
+void writeFileHeaderCompletely(ofstream&fq,struct BitMap& Header){
+    fq.write((char *)&Header,sizeof Header);
+}
 void printHeader(struct BitMap Header ){
 
     cout<<Header.Type<<endl;
@@ -66,10 +72,6 @@ void printHeader(struct BitMap Header ){
     cout<<Header.biYPelsPerMeter<<endl;
     cout<<Header.biClrUsed<<endl;
     cout<<Header.biClrImportant<<endl;
-}
-
-void writeFileHeaderCompletely(ofstream&fq,struct BitMap& Header){
-    fq.write((char *)&Header,sizeof Header);
 }
 
 void writeFileHeader(ofstream& fq,BitMap& Header){
@@ -93,17 +95,29 @@ void writeFileHeader(ofstream& fq,BitMap& Header){
 int main(){
     ifstream fp;
     fp.open("./sword.bmp",ios::binary);
+    if(!fp.is_open()){
+        cout<<"FILE NOT FOUND. ERROR. GET HELP, NOW"<<endl;
+        return -1;
+    }
     ofstream fq("image.bmp",ios::binary);
     struct BitMap Header;
+    long w,h,imageSize;
+    BYTE pixel;
 
     readHeaderFile(fp,Header);
     printHeader(Header);
     writeFileHeader(fq,Header);
 
+    w = Header.biWidth; h = Header.biHeight;
+    imageSize = Header.biSizeImage;
+
+    long image[imageSize][4];
+    
 
 
 
     fp.close();
     fq.close();
+    return 0;
 }
 
