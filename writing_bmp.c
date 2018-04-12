@@ -26,7 +26,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./sword.bmp","rb");
+    fp = fopen("./32.bmp","rb");
     FILE *fq;
         fq = fopen("image.bmp","wb");
 
@@ -170,16 +170,16 @@ int main(){
                 B =  image[(i*h)+j][2];
 
 
-              //  R = R - R%2;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
-               // B = B - B%2;//If odd, remainder is 1, and subtracts it. Else does nothing
-                //G = G - G%2;
+                 R = R - R%2;// Makes LSB 0??? THis works because if odd, 2^0 is 1, if even 2^0 = 0. So
+                 B = B - B%2;//If odd, remainder is 1, and subtracts it. Else does nothing
+                G = G - G%2;
 
                 if(Header.biBitCount == 32){
                    putc(A,fq);
                 }
-                putc(R,fq);
-                putc(G,fq);
                 putc(B,fq);
+                putc(G,fq);
+                putc(R,fq);
 
 
                // printf("Image %d,%d : R:%d G:%d B:%d   %d  \n",i,j,image[(i*h+j)][0],image[(i*h+j)][1],image[(i*h+j)][2],i*h+j);

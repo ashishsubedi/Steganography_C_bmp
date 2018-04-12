@@ -94,7 +94,7 @@ void writeFileHeader(ofstream& fq,BitMap& Header){
 }
 int main(){
     ifstream fp;
-    fp.open("./sword.bmp",ios::binary);
+    fp.open("./32.bmp",ios::binary);
     if(!fp.is_open()){
         cout<<"FILE NOT FOUND. ERROR. GET HELP, NOW"<<endl;
         return -1;
