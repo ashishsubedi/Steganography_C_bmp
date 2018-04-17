@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include<iostream>
 #include<fstream>
 
@@ -92,9 +92,30 @@ void writeFileHeader(ofstream& fq,BitMap& Header){
     fq.write((char*)&Header.biClrUsed,sizeof Header.biClrUsed);
     fq.write((char*)&Header.biClrImportant,sizeof Header.biClrImportant);
 }
+
+void getPixels(long image[][4], ifstream & fp, bool is32bit,long w, long h, int noOfPadding){
+    if(!is32bit){
+
+        for(int i=0;i<h;i++){
+            for(int j=0;j<w-noOfPadding;j++){
+                image[(i*h)+j][2]=fp.get();
+                image[(i*h)+j][1]=fp.get();
+                image[(i*h)+j][0]=fp.get();
+            }
+        }
+        for(int i=0;i<h;i++){
+            for(int j=0;j<w-noOfPadding;j++){
+               cout<<"("<<image[(i*h)+j][0]<<","
+                        <<image[(i*h)+j][1]<<","
+                        <<image[(i*h)+j][2]<<")"<<endl;
+            }
+        }
+    }
+    
+}
 int main(){
     ifstream fp;
-    fp.open("./32.bmp",ios::binary);
+    fp.open("./15x16.bmp",ios::binary);
     if(!fp.is_open()){
         cout<<"FILE NOT FOUND. ERROR. GET HELP, NOW"<<endl;
         return -1;
@@ -110,8 +131,14 @@ int main(){
 
     w = Header.biWidth; h = Header.biHeight;
     imageSize = Header.biSizeImage;
-
+   
+    cout<<fp.tellg()<<endl;
     long image[imageSize][4];
+    bool is32bit = (Header.biBitCount == 32);
+    int noOfPadding = Header.biWidth%4;
+
+    cout<<"NO OF PADDING "<<noOfPadding<<endl;
+    getPixels(image,fp,is32bit,w,h,noOfPadding);
     
 
 

@@ -26,7 +26,7 @@
 int main(){
     FILE *fp;
     //CHange image accordingly
-    fp = fopen("./32.bmp","rb");
+    fp = fopen("./15x16.bmp","rb");
     FILE *fq;
         fq = fopen("image.bmp","wb");
 
@@ -89,11 +89,12 @@ int main(){
     int image[r][4];//3 represents R G B column
 
 //ALTERNATIVE FOR UPPER COMMENTED code
-    rewind(fp);
+//NO NEED FOR THIS AS IT IS ALREADY 
+   // rewind(fp);
     printf(" Header: %ld",Header.OffBits);
     //fseek(fp,(int)Header.OffBits,SEEK_SET);
     printf("\n%ld %ld %d",ftell(fp),ftell(fq),r);
-    fseek(fp,54,SEEK_SET);
+    //fseek(fp,54,SEEK_SET);
 
 
     for(i=0;i<h;i++){
